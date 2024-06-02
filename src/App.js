@@ -10,32 +10,32 @@ export default function App() {
     {
       name: "Icabod",
       role: "Dingleberry",
-      img: "/images/male smiling.jpg",
+      img: "/demo_images/avatars/male smiling.jpg",
     },
     {
       name: "Jezabel",
       role: "Trouble Maker",
-      img: "/images/curlyfemale.png",
+      img: "/demo_images/avatars/curlyfemale.png",
     },
     {
       name: "Liclomas",
       role: "King of Poopies",
-      img: "/images/male clean.jpg",
+      img: "/demo_images/avatars/male clean.jpg",
     },
     {
       name: "Fruggzie",
       role: "Stone Cold Killer",
-      img: "/images/male bearded.jpg",
+      img: "/demo_images/avatars/male bearded.jpg",
     },
     {
       name: "Margomadison",
       role: "SCAB",
-      img: "/images/female fancy.jpg",
+      img: "/demo_images/avatars/female fancy.jpg",
     },
     {
       name: "Baby Jesus",
       role: "Just a Baby",
-      img: "/images/Minniecat.png",
+      img: "/demo_images/avatars/Minniecat.png",
     },
   ]);
   return (
