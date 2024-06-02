@@ -1,5 +1,3 @@
-// import EditEmployee from "./EditEmployee";
-
 function Employee(props) {
     return (
         // <>
@@ -7,10 +5,11 @@ function Employee(props) {
         //     <p>{props.role ? props.role : "No role assigned"}</p>
         // </>
 
-        <div className="m-2 py-8 px-8 max-w-sm bg-white rounded-xl shadow-lg space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6">
+        <div className="min-w-[350px] max-w-[350px] m-2 py-8 px-8 max-w-sm bg-white rounded-xl shadow-lg space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6">
             <img
                 className="object-cover w-[100px] block mx-auto h-24 rounded-full sm:mx-0 sm:shrink-0"
                 src={props.img}
+                alt="Not Available"
             />
             <div className="text-center space-y-2 sm:text-left">
                 <div className="space-y-0.5">
@@ -18,7 +17,7 @@ function Employee(props) {
                     <p className="text-slate-500 font-medium">{props.role}</p>
                 </div>
 
-                {/* <EditEmployee /> */}
+                {props.editEmployee}
             </div>
         </div>
     );
