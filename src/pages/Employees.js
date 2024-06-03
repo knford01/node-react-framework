@@ -67,7 +67,6 @@ function Employees() {
 
     return (
         <div className="">
-            {/* <SidebarWithContentSeparator /> */}
             <div className="flex flex-wrap justify-center my-2">
                 {employees.map((employee) => {
                     const editEmployee = (

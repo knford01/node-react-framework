@@ -15,7 +15,7 @@ import { NavLink } from 'react-router-dom';
 const navigation = [
     { name: 'Employees', href: '/Employees' },
     { name: 'Customers', href: '/Customers' },
-    { name: 'Projects', href: '/Other' },
+    { name: 'Dictionary', href: '/Dictionary' },
     { name: 'Calendar', href: '/Other2' },
 ]
 
@@ -157,7 +157,7 @@ export default function Header(props) {
                     </>
                 )}
             </Disclosure>
-            <div className="bg-gray-200 min-h-screen px-2 py-2">{props.children}</div>
+            <div className="bg-gray-200 min-h-screen px-3 py-2">{props.children}</div>
         </>
     )
 }
