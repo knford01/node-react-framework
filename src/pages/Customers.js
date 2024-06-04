@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-import { v4 as uuidv4 } from "uuid";
 import { baseUrl } from '../shared';
 import AddCustomer from '../components/AddCustomer';
 
@@ -47,14 +46,12 @@ function Customers() {
     return (
         <>
             Here are our customers:
-            <ul>
-                {customers ?
-                    customers.map((customer) => {
-                        return <li key={uuidv4()}><Link to={"/customers/" + customer.id}>{customer.name}</Link></li>;
-                    })
-                    : null
-                }
-            </ul>
+            {customers ?
+                customers.map((customer) => {
+                    return <div key={customer.id}><Link to={"/customers/" + customer.id}><button className='m-2 bg-purple-400 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded'>{customer.name}</button></Link></div>;
+                })
+                : null
+            }
             <AddCustomer newCustomer={newCustomer} show={show} toggleShow={toggleShow} />
         </>
     )
