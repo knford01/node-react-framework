@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { useContext } from 'react'
 import {
     Disclosure,
     DisclosureButton,
@@ -11,12 +11,13 @@ import {
 } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { NavLink } from 'react-router-dom';
+import { LoginContext } from '../App';
 
 const navigation = [
     { name: 'Employees', href: '/Employees' },
     { name: 'Customers', href: '/Customers' },
+    { name: 'Users', href: '/Users' },
     { name: 'Dictionary', href: '/Dictionary' },
-    { name: 'Calendar', href: '/Other2' },
 ]
 
 function classNames(...classes) {
@@ -24,6 +25,8 @@ function classNames(...classes) {
 }
 
 export default function Header(props) {
+    const [loggedIn, setLoggedIn] = useContext(LoginContext);
+
     return (
         <>
             <Disclosure as="nav" className="bg-gray-800">
@@ -53,18 +56,43 @@ export default function Header(props) {
                                     </div>
                                     <div className="hidden sm:ml-6 sm:block">
                                         <div className="flex space-x-4">
-                                            {navigation.map((item) => (
+
+                                            {loggedIn ?
+                                                navigation.map((item) => (
+                                                    <NavLink
+                                                        key={item.name}
+                                                        to={item.href}
+                                                        className={({ isActive }) => {
+                                                            return "px-3 py-2 rounded-md text-sm font-medium no-underline" +
+                                                                (isActive ? 'text-gray-300 bg-gray-700 text-white' : 'bg-gray-900 text-white hover:bg-gray-700')
+                                                        }}
+                                                    >
+                                                        {item.name}
+                                                    </NavLink>
+                                                ))
+                                                :
+                                                <></>
+                                            }
+
+
+                                            {loggedIn ?
                                                 <NavLink
-                                                    key={item.name}
-                                                    to={item.href}
-                                                    className={({ isActive }) => {
-                                                        return "px-3 py-2 rounded-md text-sm font-medium no-underline" +
-                                                            (isActive ? 'text-gray-300 bg-gray-700 text-white' : 'bg-gray-900 text-white hover:bg-gray-700')
+                                                    to={'/login'}
+                                                    onClick={() => {
+                                                        setLoggedIn(false);
+                                                        localStorage.clear();
                                                     }}
-                                                >
-                                                    {item.name}
+                                                    className="px-3 py-2 rounded-md text-sm font-medium no-underline text-gray-300 hover:bg-gray-700 hover:text-white">
+                                                    Logout
                                                 </NavLink>
-                                            ))}
+                                                :
+                                                // <NavLink
+                                                //     to={'/login'}
+                                                //     className="px-3 py-2 rounded-md text-sm font-medium no-underline text-gray-300 hover:bg-gray-700 hover:text-white">
+                                                //     Login
+                                                // </NavLink>
+                                                <></>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -140,18 +168,40 @@ export default function Header(props) {
 
                         <DisclosurePanel className="sm:hidden">
                             <div className="space-y-1 px-2 pb-3 pt-2">
-                                {navigation.map((item) => (
+                                {loggedIn ?
+                                    navigation.map((item) => (
+                                        <NavLink
+                                            key={item.name}
+                                            to={item.href}
+                                            className={({ isActive }) => {
+                                                return "block px-3 py-2 rounded-md text-sm font-medium no-underline" +
+                                                    (isActive ? 'text-gray-300 bg-gray-700 text-white' : 'bg-gray-900 text-white hover:bg-gray-700')
+                                            }}
+                                        >
+                                            {item.name}
+                                        </NavLink>
+                                    ))
+                                    :
+                                    <></>
+                                }
+                                {loggedIn ?
                                     <NavLink
-                                        key={item.name}
-                                        to={item.href}
-                                        className={({ isActive }) => {
-                                            return "block px-3 py-2 rounded-md text-sm font-medium no-underline" +
-                                                (isActive ? 'text-gray-300 bg-gray-700 text-white' : 'bg-gray-900 text-white hover:bg-gray-700')
+                                        to={'/login'}
+                                        onClick={() => {
+                                            setLoggedIn(false);
+                                            localStorage.clear();
                                         }}
-                                    >
-                                        {item.name}
+                                        className="block px-3 py-2 rounded-md text-sm font-medium no-underline text-gray-300 hover:bg-gray-700 hover:text-white">
+                                        Logout
                                     </NavLink>
-                                ))}
+                                    :
+                                    // <NavLink
+                                    //     to={'/login'}
+                                    //     className="block px-3 py-2 rounded-md text-sm font-medium no-underline text-gray-300 hover:bg-gray-700 hover:text-white">
+                                    //     Login
+                                    // </NavLink>
+                                    <></>
+                                }
                             </div>
                         </DisclosurePanel>
                     </>

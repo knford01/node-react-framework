@@ -1,16 +1,19 @@
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
 import NotFound from '../pages/NotFound_404';
 import { baseUrl } from '../shared';
+import { LoginContext } from '../App';
 
 export default function Customer() {
     const { id } = useParams();
+    const [loggedIn, setLoggedIn] = useContext(LoginContext);
     const [customer, setCustomer] = useState();
     const [tempCustomer, setTempCustomer] = useState();
     const [notFound, setNotFound] = useState(false);
     const [changed, setChanged] = useState(false);
     const [error, setError] = useState();
 
+    const location = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -23,7 +26,12 @@ export default function Customer() {
     useEffect(() => {
         const url = baseUrl + 'api/customers/' + id;
 
-        fetch(url)
+        fetch(url, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('access')
+            }
+        })
             .then((response) => {
                 if (response.status === 404) {
                     //Two was to handle this error\\
@@ -31,6 +39,13 @@ export default function Customer() {
                     // navigate('/404');
                     //render 404 componenet\\
                     setNotFound(true);
+                } else if (response.status === 401) {
+                    setLoggedIn(false);
+                    navigate('/login', {
+                        state: {
+                            previousURL: location.pathname
+                        }
+                    });
                 } else {
                     return response.json();
                 }
@@ -43,16 +58,64 @@ export default function Customer() {
                     setNotFound(true);
                 }
             })
-    }, [id]);
+    }, [id, navigate, location, setLoggedIn]);
 
     function updateCustomer() {
         const url = baseUrl + 'api/customers/' + id;
-        fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(tempCustomer) })
-            .then((response) => { if (!response.ok) throw new Error('Failed to update customer'); return response.json(); })
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('access')
+            },
+            body: JSON.stringify(tempCustomer)
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Failed to update customer');
+                } else if (response.status === 401) {
+                    setLoggedIn(false);
+                    navigate('/login', {
+                        state: {
+                            previousURL: location.pathname
+                        }
+                    });
+                } else {
+                    return response.json();
+                }
+            })
             .then((data) => { setChanged(false); setCustomer(data.customer); setError(undefined); console.log(data); })
             .catch((e) => {
                 // console.log(e);
                 setError(e.message);
+            })
+    }
+
+    function deleteCustomer() {
+        const url = baseUrl + 'api/customers/' + id;
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('access')
+            }
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Something went wrong');
+                } else if (response.status === 401) {
+                    setLoggedIn(false);
+                    navigate('/login', {
+                        state: {
+                            previousURL: location.pathname
+                        }
+                    });
+                }
+                navigate('/customers');
+            })
+            .catch((e) => {
+                setError(e.message);
+                // console.log(e);
             })
     }
 
@@ -102,21 +165,8 @@ export default function Customer() {
 
                     <button
                         className="m-2 bg-slate-400 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
-                        onClick={(e) => {
-                            const url = baseUrl + 'api/customers/' + id;
-
-                            fetch(url, { method: 'DELETE', headers: { 'Content-Type': 'application/json' } })
-                                .then((response) => {
-                                    if (!response.ok) {
-                                        throw new Error('Something went wrong');
-                                    }
-                                    navigate('/customers');
-                                })
-                                .catch((e) => {
-                                    setError(e.message);
-                                    // console.log(e);
-                                })
-                        }}>Delete
+                        onClick={() => { deleteCustomer() }}>
+                        Delete
                     </button >
 
                     {changed ?
