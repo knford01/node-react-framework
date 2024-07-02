@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import NotFound from '../components/NotFound_404'
 import DefinitionSearch from "../components/DefinitionSearch";

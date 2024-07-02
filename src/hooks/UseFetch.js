@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function useFetch(url, { method, headers, body } = {}) {
@@ -34,6 +34,7 @@ export default function useFetch(url, { method, headers, body } = {}) {
             });
     }
 
+    //This function allows user to add new data to DB\\
     function appendData(newData) {
         fetch(url, {
             method: 'POST',
@@ -56,18 +57,23 @@ export default function useFetch(url, { method, headers, body } = {}) {
                 return response.json();
             })
             .then((d) => {
+                //Grab object being added to the array\\
                 const submitted = Object.values(d)[0];
 
+                //Duplicate exists state as new object in memory and push the new object onto that state then replace existing state with new object\\
                 const newState = { ...data };
                 Object.values(newState)[0].push(submitted);
 
-                setData(newState); //new object, it's seen as a state change
+                //new object, it's seen as a state change\\
+                setData(newState);
             })
             .catch((e) => {
                 console.log(e);
                 setErrorStatus(e);
             });
     }
+
+    //Add the ability to delete and update for practice\\
 
     return { request, appendData, data, errorStatus };
 }
